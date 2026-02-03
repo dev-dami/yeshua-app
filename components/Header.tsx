@@ -14,7 +14,6 @@ export default function Header({ currentPage = 'home' }: HeaderProps) {
   const navLinks = [
     { href: '/home', label: 'Home', id: 'home' },
     { href: '/about', label: 'About', id: 'about' },
-    { href: '/home#programs', label: 'Programs', id: 'programs' },
     { href: '/home#admissions', label: 'Admissions', id: 'admissions' },
     { href: '/gallery', label: 'Gallery', id: 'gallery' },
     { href: '/home#events', label: 'Events', id: 'events' },

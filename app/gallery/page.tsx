@@ -1,61 +1,206 @@
+'use client'
+
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 const galleryImages = Array.from({ length: 35 }, (_, i) => `${i + 1}.jpeg`)
 
+const categories = [
+  { id: 'all', label: 'All Photos' },
+  { id: 'events', label: 'Events' },
+  { id: 'campus', label: 'Campus Life' },
+  { id: 'sports', label: 'Sports' },
+]
+
 export default function GalleryPage() {
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null)
+  const [activeCategory, setActiveCategory] = useState('all')
+
   return (
     <div className="font-sans antialiased">
-      <header className="bg-red-400 text-white shadow-lg py-6">
-        <div className="container mx-auto px-4 text-center">
-          <Link href="/home">
-            <Image
-              src="/images/images-removebg-preview.png"
-              width={50}
-              height={50}
-              alt="Yeshua High Logo"
-              className="mx-auto"
-            />
-          </Link>
-          <h1 className="text-3xl font-bold">
-            <Link href="/home">Gallery Section</Link>
-          </h1>
-        </div>
-      </header>
+      <Header currentPage="gallery" />
 
-      <div id="gallery" className="py-12 bg-gray-50">
-        <div className="max-w-6xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center text-gray-800 mb-8">Our School Gallery</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+      <section
+        className="relative py-32 text-white"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(/images/music 1.jpeg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="container mx-auto px-4 text-center">
+          <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-6">
+            <i className="fas fa-images mr-2"></i>
+            Photo Gallery
+          </span>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">School Gallery</h1>
+          <p className="text-xl md:text-2xl max-w-3xl mx-auto text-gray-200">
+            Capturing memorable moments and celebrating our vibrant school community.
+          </p>
+        </div>
+      </section>
+
+      <section className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <span className="inline-block px-4 py-1 bg-[#a73434]/10 rounded-full text-[#a73434] text-sm font-semibold mb-4">
+              Browse Photos
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Our <span className="gradient-text">Moments</span>
+            </h2>
+            <div className="section-underline"></div>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-3 mb-12">
+            {categories.map((cat) => (
+              <button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`px-6 py-2 rounded-full font-medium transition-all duration-300 ${
+                  activeCategory === cat.id
+                    ? 'bg-[#a73434] text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                }`}
+              >
+                {cat.label}
+              </button>
+            ))}
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {galleryImages.map((img) => (
-              <div key={img}>
+              <button
+                key={img}
+                onClick={() => setLightboxImage(`/images/${img}`)}
+                className="relative group overflow-hidden rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#a73434] aspect-square"
+              >
                 <Image
                   src={`/images/${img}`}
                   alt="Gallery image"
                   width={300}
-                  height={200}
-                  className="w-full h-48 object-cover rounded-lg shadow-md hover:shadow-xl transition-shadow"
+                  height={300}
+                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                 />
-              </div>
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-white/20 backdrop-blur-sm p-4 rounded-full">
+                      <i className="fas fa-search-plus text-white text-xl"></i>
+                    </div>
+                  </div>
+                </div>
+              </button>
             ))}
           </div>
 
-          <div className="text-center mt-8">
+          <div className="text-center mt-12">
             <Link
               href="/gallery/awards"
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-6 rounded-full transition-colors inline-block"
+              className="btn-primary inline-flex items-center"
             >
-              Award and Achievement <i className="fas fa-images ml-2"></i>
+              <i className="fas fa-trophy mr-2"></i>
+              View Awards & Achievements
             </Link>
           </div>
         </div>
-      </div>
+      </section>
 
-      <footer className="bg-gray-800 text-white py-6">
-        <div className="container mx-auto px-4 text-center text-sm">
-          <p>&copy; {new Date().getFullYear()} Yeshua High School. All rights reserved.</p>
+      <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <span className="inline-block px-4 py-1 bg-[#a73434]/10 rounded-full text-[#a73434] text-sm font-semibold mb-4">
+              Highlights
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Featured <span className="gradient-text">Collections</span>
+            </h2>
+            <div className="section-underline"></div>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="card-enhanced overflow-hidden group">
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src="/images/music 1.jpeg"
+                  alt="Cultural Events"
+                  width={400}
+                  height={256}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="text-xl font-bold text-white mb-1">Cultural Events</h3>
+                  <p className="text-white/80 text-sm">Celebrating our diverse heritage</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="card-enhanced overflow-hidden group">
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src="/images/sport 1.jpeg"
+                  alt="Sports Activities"
+                  width={400}
+                  height={256}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="text-xl font-bold text-white mb-1">Sports & Athletics</h3>
+                  <p className="text-white/80 text-sm">Champions in the making</p>
+                </div>
+              </div>
+            </div>
+
+            <div className="card-enhanced overflow-hidden group">
+              <div className="relative h-64 overflow-hidden">
+                <Image
+                  src="/images/32.jpeg"
+                  alt="Academic Excellence"
+                  width={400}
+                  height={256}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+                <div className="absolute bottom-4 left-4 right-4">
+                  <h3 className="text-xl font-bold text-white mb-1">Academic Life</h3>
+                  <p className="text-white/80 text-sm">Learning and growing together</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-      </footer>
+      </section>
+
+      <Footer />
+
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+          onClick={() => setLightboxImage(null)}
+        >
+          <button
+            onClick={() => setLightboxImage(null)}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10"
+            aria-label="Close lightbox"
+          >
+            <i className="fas fa-times text-3xl"></i>
+          </button>
+          <div className="relative max-w-5xl max-h-[90vh] w-full">
+            <Image
+              src={lightboxImage}
+              alt="Gallery image"
+              width={1200}
+              height={800}
+              className="w-full h-auto max-h-[90vh] object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

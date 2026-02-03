@@ -43,6 +43,7 @@ export default function HomePage() {
     studentGrade: '',
     message: '',
   })
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null)
 
   useEffect(() => {
     fetch('/api/events')
@@ -270,122 +271,6 @@ export default function HomePage() {
                 <h3 className="text-xl font-bold text-gray-800 text-center">
                   Outstanding Result for 2025
                 </h3>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section id="programs" className="py-20 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1 bg-[#a73434]/10 rounded-full text-[#a73434] text-sm font-semibold mb-4">
-              Programs
-            </span>
-            <h2 className="text-3xl md:text-5xl font-bold text-gray-800 mb-4">
-              Our <span className="gradient-text">Academic Programs</span>
-            </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
-              We offer a comprehensive curriculum designed to challenge and inspire students at every
-              grade level.
-            </p>
-            <div className="section-underline mt-6"></div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="card-enhanced overflow-hidden group">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="/images/47.jpeg"
-                  alt="Elementary students"
-                  width={400}
-                  height={200}
-                  className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <span className="absolute bottom-4 left-4 bg-white/90 text-[#a73434] px-3 py-1 rounded-full text-sm font-semibold">
-                  Grades K-5
-                </span>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center mb-4">
-                  <div className="bg-gradient-to-br from-[#dc2626] to-[#b91c1c] text-white p-3 rounded-xl mr-4 shadow-lg">
-                    <i className="fas fa-child text-xl"></i>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800">Elementary School</h3>
-                </div>
-                <p className="text-gray-600 mb-5 leading-relaxed">
-                  Our elementary program emphasizes foundational skills in literacy, numeracy, and
-                  social development with hands-on learning experiences.
-                </p>
-                <button className="text-[#a73434] hover:text-[#dc2626] font-semibold text-sm flex items-center group/btn">
-                  Explore Program
-                  <i className="fas fa-arrow-right ml-2 transition-transform group-hover/btn:translate-x-1"></i>
-                </button>
-              </div>
-            </div>
-
-            <div className="card-enhanced overflow-hidden group">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="/images/32.jpeg"
-                  alt="Middle school students"
-                  width={400}
-                  height={200}
-                  className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <span className="absolute bottom-4 left-4 bg-white/90 text-[#a73434] px-3 py-1 rounded-full text-sm font-semibold">
-                  Grades 6-9
-                </span>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center mb-4">
-                  <div className="bg-gradient-to-br from-green-500 to-green-600 text-white p-3 rounded-xl mr-4 shadow-lg">
-                    <i className="fas fa-users text-xl"></i>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800">Middle School</h3>
-                </div>
-                <p className="text-gray-600 mb-5 leading-relaxed">
-                  Our middle school program encourages exploration across subjects while developing
-                  critical thinking and independent learning skills.
-                </p>
-                <button className="text-[#a73434] hover:text-[#dc2626] font-semibold text-sm flex items-center group/btn">
-                  Explore Program
-                  <i className="fas fa-arrow-right ml-2 transition-transform group-hover/btn:translate-x-1"></i>
-                </button>
-              </div>
-            </div>
-
-            <div className="card-enhanced overflow-hidden group">
-              <div className="relative overflow-hidden">
-                <Image
-                  src="/images/35.jpeg"
-                  alt="High school students"
-                  width={400}
-                  height={200}
-                  className="w-full h-56 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                <span className="absolute bottom-4 left-4 bg-white/90 text-[#a73434] px-3 py-1 rounded-full text-sm font-semibold">
-                  Grades 10-12
-                </span>
-              </div>
-              <div className="p-6">
-                <div className="flex items-center mb-4">
-                  <div className="bg-gradient-to-br from-purple-600 to-purple-700 text-white p-3 rounded-xl mr-4 shadow-lg">
-                    <i className="fas fa-user-graduate text-xl"></i>
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-800">High School</h3>
-                </div>
-                <p className="text-gray-600 mb-5 leading-relaxed">
-                  Our rigorous high school curriculum offers Compulsory Subjects, STEM tracks, and
-                  college counseling to prepare students for success.
-                </p>
-                <button className="text-[#a73434] hover:text-[#dc2626] font-semibold text-sm flex items-center group/btn">
-                  Explore Program
-                  <i className="fas fa-arrow-right ml-2 transition-transform group-hover/btn:translate-x-1"></i>
-                </button>
               </div>
             </div>
           </div>
@@ -637,13 +522,13 @@ export default function HomePage() {
         </div>
         <div className="container mx-auto px-4 relative z-10">
           <div className="text-center mb-16">
-            <span className="inline-block px-4 py-1 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-semibold mb-4">
+            <span className="inline-block px-4 py-1 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm font-semibold mb-4">
               Testimonials
             </span>
-            <h2 className="text-3xl md:text-5xl font-bold mb-4">
-              What <span className="text-[#a73434]">Parents & Students</span> Say
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 text-white">
+              What <span className="text-yellow-300">Parents & Students</span> Say
             </h2>
-            <div className="w-20 h-1 bg-[#a73434] mx-auto rounded-full"></div>
+            <div className="w-20 h-1 bg-yellow-300 mx-auto rounded-full"></div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -746,7 +631,11 @@ export default function HomePage() {
 
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {['music 1', 'music 2', 'sport 1', 'music 3', '21', '23', '24', '25'].map((img) => (
-              <div key={img} className="relative group overflow-hidden rounded-lg">
+              <button
+                key={img}
+                onClick={() => setLightboxImage(`/images/${img}.jpeg`)}
+                className="relative group overflow-hidden rounded-lg cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#a73434]"
+              >
                 <Image
                   src={`/images/${img}.jpeg`}
                   alt="Gallery"
@@ -755,9 +644,9 @@ export default function HomePage() {
                   className="w-full h-48 object-cover transform group-hover:scale-110 smooth-transition"
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-40 flex items-center justify-center opacity-0 group-hover:opacity-100 smooth-transition">
-                  <i className="fas fa-expand text-white text-2xl"></i>
+                  <i className="fas fa-search-plus text-white text-2xl"></i>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
 
@@ -877,7 +766,7 @@ export default function HomePage() {
                       <i className="fas fa-clock text-red-600"></i>
                     </div>
                     <div>
-                      <h4 className="font-semibold text-gray-800">Office Hours</h4>
+                      <h4 className="font-semibold text-gray-800">Student Hours</h4>
                       <p className="text-gray-600">Monday-Friday: 6:00 AM - 4:00 PM</p>
                     </div>
                   </div>
@@ -888,30 +777,35 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-16 bg-gradient-to-r from-[#a73434] to-[#8f2c2c] text-white relative overflow-hidden">
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{ backgroundImage: 'url("data:image/svg+xml,%3Csvg width=\'60\' height=\'60\' viewBox=\'0 0 60 60\' xmlns=\'http://www.w3.org/2000/svg\'%3E%3Cg fill=\'none\' fill-rule=\'evenodd\'%3E%3Cg fill=\'%23ffffff\' fill-opacity=\'1\'%3E%3Cpath d=\'M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z\'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")' }}></div>
+      <section className="py-20 bg-gray-900 text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 left-0 w-72 h-72 bg-[#a73434] rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 right-0 w-96 h-96 bg-[#a73434] rounded-full blur-3xl translate-x-1/3 translate-y-1/3"></div>
         </div>
         <div className="container mx-auto px-4 text-center relative z-10">
           <div className="max-w-2xl mx-auto">
-            <i className="fas fa-envelope-open-text text-4xl text-[#a73434] mb-6"></i>
-            <h2 className="text-2xl md:text-4xl font-bold mb-4">Stay Connected</h2>
-            <p className="text-white/80 mb-8 text-lg">
+            <div className="w-16 h-16 bg-[#a73434] rounded-full flex items-center justify-center mx-auto mb-6">
+              <i className="fas fa-envelope-open-text text-2xl text-white"></i>
+            </div>
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">Stay Connected</h2>
+            <p className="text-gray-300 mb-8 text-lg leading-relaxed">
               Subscribe to our newsletter for school updates, event announcements, and more.
             </p>
-            <form className="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+            <form className="flex flex-col sm:flex-row gap-4 max-w-xl mx-auto">
               <input
                 type="email"
                 placeholder="Enter your email address"
-                className="flex-grow px-5 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a73434] text-gray-800 shadow-lg"
+                className="flex-grow px-6 py-4 rounded-xl focus:outline-none focus:ring-2 focus:ring-[#a73434] text-gray-800 bg-white shadow-lg"
               />
               <button
                 type="submit"
-                className="bg-[#a73434] hover:bg-[#8f2c2c] text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:shadow-lg hover:-translate-y-0.5"
+                className="bg-[#a73434] hover:bg-[#8f2c2c] text-white px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:shadow-xl hover:-translate-y-0.5 whitespace-nowrap"
               >
+                <i className="fas fa-paper-plane mr-2"></i>
                 Subscribe
               </button>
             </form>
+            <p className="text-gray-500 text-sm mt-4">We respect your privacy. Unsubscribe anytime.</p>
           </div>
         </div>
       </section>
@@ -929,6 +823,31 @@ export default function HomePage() {
       </div>
 
       <Footer />
+
+      {lightboxImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setLightboxImage(null)}
+        >
+          <button
+            onClick={() => setLightboxImage(null)}
+            className="absolute top-4 right-4 text-white hover:text-gray-300 transition-colors z-10"
+            aria-label="Close lightbox"
+          >
+            <i className="fas fa-times text-3xl"></i>
+          </button>
+          <div className="relative max-w-4xl max-h-[90vh] w-full">
+            <Image
+              src={lightboxImage}
+              alt="Gallery image"
+              width={1200}
+              height={800}
+              className="w-full h-auto max-h-[90vh] object-contain rounded-lg"
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+      )}
     </div>
   )
 }

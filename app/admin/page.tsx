@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useRef } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 type Section = 'dashboard' | 'events' | 'news'
 
@@ -31,6 +32,9 @@ interface Toast {
 }
 
 export default function AdminPage() {
+  const router = useRouter()
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  
   const [activeSection, setActiveSection] = useState<Section>('dashboard')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [currentDate, setCurrentDate] = useState('')
@@ -46,6 +50,8 @@ export default function AdminPage() {
   const [events, setEvents] = useState<EventItem[]>([])
   const [eventsLoading, setEventsLoading] = useState(false)
   const [editingEvent, setEditingEvent] = useState<EventItem | null>(null)
+  const [imageUploading, setImageUploading] = useState(false)
+  const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [eventForm, setEventForm] = useState({
     title: '',
     description: '',
@@ -58,6 +64,54 @@ export default function AdminPage() {
   const showToast = (message: string, type: 'success' | 'error') => {
     setToast({ message, type })
     setTimeout(() => setToast(null), 3000)
+  }
+
+  const handleLogout = async () => {
+    document.cookie = 'admin_token=; path=/; expires=Thu, 01 Jan 1970 00:00:01 GMT'
+    router.push('/login')
+    router.refresh()
+  }
+
+  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    const previewUrl = URL.createObjectURL(file)
+    setImagePreview(previewUrl)
+    setImageUploading(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+
+      const res = await fetch('/api/upload', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (res.ok) {
+        const data = await res.json()
+        setEventForm({ ...eventForm, image_url: data.url })
+        showToast('Image uploaded successfully', 'success')
+      } else {
+        const errorData = await res.json()
+        showToast(errorData.error || 'Failed to upload image', 'error')
+        setImagePreview(null)
+      }
+    } catch {
+      showToast('Failed to upload image', 'error')
+      setImagePreview(null)
+    } finally {
+      setImageUploading(false)
+    }
+  }
+
+  const clearImagePreview = () => {
+    setImagePreview(null)
+    setEventForm({ ...eventForm, image_url: '' })
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }
 
   useEffect(() => {
@@ -180,7 +234,6 @@ export default function AdminPage() {
     }
   }
 
-  // Events CRUD
   const resetEventForm = () => {
     setEventForm({
       title: '',
@@ -191,6 +244,10 @@ export default function AdminPage() {
       image_url: ''
     })
     setEditingEvent(null)
+    setImagePreview(null)
+    if (fileInputRef.current) {
+      fileInputRef.current.value = ''
+    }
   }
 
   const handleAddEvent = async (e: React.FormEvent) => {
@@ -258,6 +315,7 @@ export default function AdminPage() {
       location: event.location || '',
       image_url: event.imageUrl || ''
     })
+    setImagePreview(event.imageUrl || null)
   }
 
   const handleToggleEvent = async (event: EventItem) => {
@@ -351,7 +409,7 @@ export default function AdminPage() {
             </ul>
           </nav>
 
-          <div className="p-4 border-t">
+          <div className="p-4 border-t space-y-2">
             <Link
               href="/"
               className="flex items-center gap-3 px-4 py-2 rounded-lg text-[#a73434] hover:bg-red-50 smooth-transition font-medium"
@@ -359,6 +417,13 @@ export default function AdminPage() {
               <i className="fas fa-arrow-left w-5 text-center"></i>
               <span>Back to Site</span>
             </Link>
+            <button
+              onClick={handleLogout}
+              className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-100 smooth-transition font-medium"
+            >
+              <i className="fas fa-sign-out-alt w-5 text-center"></i>
+              <span>Logout</span>
+            </button>
           </div>
         </aside>
 
@@ -528,14 +593,43 @@ export default function AdminPage() {
                       </div>
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Image URL</label>
-                      <input
-                        type="text"
-                        value={eventForm.image_url}
-                        onChange={(e) => setEventForm({ ...eventForm, image_url: e.target.value })}
-                        placeholder="/images/event.jpeg"
-                        className="w-full border rounded-lg p-2.5 focus:ring-2 focus:ring-[#a73434] focus:border-[#a73434] focus:outline-none"
-                      />
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Event Image</label>
+                      <div className="space-y-3">
+                        {imagePreview && (
+                          <div className="relative inline-block">
+                            <img
+                              src={imagePreview}
+                              alt="Preview"
+                              className="h-32 w-auto rounded-lg object-cover border"
+                            />
+                            <button
+                              type="button"
+                              onClick={clearImagePreview}
+                              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
+                            >
+                              <i className="fas fa-times text-xs"></i>
+                            </button>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-3">
+                          <label className="cursor-pointer bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2.5 rounded-lg transition-colors flex items-center gap-2">
+                            <i className="fas fa-cloud-upload-alt"></i>
+                            {imageUploading ? 'Uploading...' : 'Upload Image'}
+                            <input
+                              ref={fileInputRef}
+                              type="file"
+                              accept="image/jpeg,image/png,image/webp,image/gif"
+                              onChange={handleImageUpload}
+                              disabled={imageUploading}
+                              className="hidden"
+                            />
+                          </label>
+                          {imageUploading && (
+                            <div className="w-5 h-5 border-2 border-[#a73434] border-t-transparent rounded-full animate-spin"></div>
+                          )}
+                        </div>
+                        <p className="text-xs text-gray-500">Accepts JPEG, PNG, WebP, GIF. Max 5MB.</p>
+                      </div>
                     </div>
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
