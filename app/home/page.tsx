@@ -7,8 +7,59 @@ import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import NewsTicker from '@/components/NewsTicker'
 
+interface EventType {
+  id: number
+  title: string
+  description: string | null
+  eventDate: string
+  eventTime: string | null
+  imageUrl: string | null
+}
+
+const fallbackEvents: EventType[] = [
+  {
+    id: 1,
+    title: 'Cultural Day',
+    description: 'The Valedictory Service and Anniversary celebration is a remarkable event.',
+    eventDate: '2025-09-17',
+    eventTime: '10:00',
+    imageUrl: '/images/43.jpeg',
+  },
+  {
+    id: 2,
+    title: 'Talent Hunt',
+    description: 'Celebrate student innovation at our science fair.',
+    eventDate: '2025-07-19',
+    eventTime: '09:00',
+    imageUrl: '/images/41.jpeg',
+  },
+  {
+    id: 3,
+    title: 'Musical Display',
+    description: 'Showcasing the students\' musical talents.',
+    eventDate: '2025-07-19',
+    eventTime: '14:00',
+    imageUrl: '/images/music 1.jpeg',
+  },
+]
+
+function formatDate(dateStr: string) {
+  const date = new Date(dateStr)
+  return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
+}
+
+function formatTime(timeStr: string | null) {
+  if (!timeStr) return null
+  const [hours, minutes] = timeStr.split(':')
+  const hour = parseInt(hours)
+  const ampm = hour >= 12 ? 'PM' : 'AM'
+  const hour12 = hour % 12 || 12
+  return `${hour12}:${minutes} ${ampm}`
+}
+
 export default function HomePage() {
   const videoRef = useRef<HTMLVideoElement>(null)
+  const [events, setEvents] = useState<EventType[]>(fallbackEvents)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -24,6 +75,13 @@ export default function HomePage() {
         // Autoplay blocked, user interaction required
       })
     }
+
+    fetch('/api/events')
+      .then(res => res.json())
+      .then(data => {
+        if (data.length > 0) setEvents(data)
+      })
+      .catch(() => {})
   }, [])
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -519,92 +577,37 @@ export default function HomePage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
-            <div className="bg-white rounded-lg overflow-hidden shadow-sm smooth-transition card-hover">
-              <div className="relative">
-                <Image
-                  src="/images/43.jpeg"
-                  alt="Cultural Day"
-                  width={400}
-                  height={200}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute top-4 left-4 bg-white text-red-600 px-3 py-1 rounded-full text-sm font-semibold">
-                  September 17
+            {events.map((event) => (
+              <div key={event.id} className="bg-white rounded-lg overflow-hidden shadow-sm smooth-transition card-hover">
+                <div className="relative">
+                  <Image
+                    src={event.imageUrl || '/images/43.jpeg'}
+                    alt={event.title}
+                    width={400}
+                    height={200}
+                    className="w-full h-48 object-cover"
+                  />
+                  <div className="absolute top-4 left-4 bg-white text-[#a73434] px-3 py-1 rounded-full text-sm font-semibold">
+                    {formatDate(event.eventDate)}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">{event.title}</h3>
+                  {event.eventTime && (
+                    <div className="flex items-center text-gray-600 text-sm mb-4">
+                      <i className="far fa-clock mr-2"></i>
+                      <span>{formatTime(event.eventTime)}</span>
+                    </div>
+                  )}
+                  {event.description && (
+                    <p className="text-gray-600 mb-4 line-clamp-3">{event.description}</p>
+                  )}
+                  <button className="text-[#a73434] hover:text-[#8f2c2c] font-medium text-sm flex items-center">
+                    Learn More <i className="fas fa-arrow-right ml-1"></i>
+                  </button>
                 </div>
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">Cultural Day</h3>
-                <div className="flex items-center text-gray-600 text-sm mb-4">
-                  <i className="far fa-clock mr-2"></i>
-                  <span>10:00 AM - 3:00 PM</span>
-                </div>
-                <p className="text-gray-600 mb-4">
-                  The Valedictory Service and Anniversary celebration is a remarkable event marked by
-                  heartfelt speeches, joyful reflection, and the celebration of excellence.
-                </p>
-                <button className="text-red-600 hover:text-red-800 font-medium text-sm flex items-center">
-                  Learn More <i className="fas fa-arrow-right ml-1"></i>
-                </button>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg overflow-hidden shadow-sm smooth-transition card-hover">
-              <div className="relative">
-                <Image
-                  src="/images/41.jpeg"
-                  alt="Talent Hunt"
-                  width={400}
-                  height={200}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute top-4 left-4 bg-white text-red-600 px-3 py-1 rounded-full text-sm font-semibold">
-                  July 19
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">Talent Hunt</h3>
-                <div className="flex items-center text-gray-600 text-sm mb-4">
-                  <i className="far fa-clock mr-2"></i>
-                  <span>9:00 AM - 3:00 PM</span>
-                </div>
-                <p className="text-gray-600 mb-4">
-                  Celebrate student innovation at our science fair featuring projects from all grade
-                  levels.
-                </p>
-                <button className="text-red-600 hover:text-red-800 font-medium text-sm flex items-center">
-                  Learn More <i className="fas fa-arrow-right ml-1"></i>
-                </button>
-              </div>
-            </div>
-
-            <div className="bg-white rounded-lg overflow-hidden shadow-sm smooth-transition card-hover">
-              <div className="relative">
-                <Image
-                  src="/images/music 1.jpeg"
-                  alt="Musical Display"
-                  width={400}
-                  height={200}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="absolute top-4 left-4 bg-white text-red-600 px-3 py-1 rounded-full text-sm font-semibold">
-                  July 19
-                </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-gray-800 mb-2">Musical Display</h3>
-                <div className="flex items-center text-gray-600 text-sm mb-4">
-                  <i className="far fa-clock mr-2"></i>
-                  <span>2:00 PM</span>
-                </div>
-                <p className="text-gray-600 mb-4">
-                  The musical display lit up the atmosphere with vibrant rhythms and harmonies,
-                  showcasing the students&apos; talents.
-                </p>
-                <button className="text-red-600 hover:text-red-800 font-medium text-sm flex items-center">
-                  Buy Tickets <i className="fas fa-arrow-right ml-1"></i>
-                </button>
-              </div>
-            </div>
+            ))}
           </div>
 
           <div className="text-center">

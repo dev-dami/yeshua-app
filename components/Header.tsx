@@ -36,10 +36,6 @@ export default function Header({ currentPage = 'home' }: HeaderProps) {
                 style={{ width: 'auto', height: 'auto' }}
               />
             </div>
-            <div className="flex flex-col">
-              <span className="text-xl font-bold text-[#a73434] tracking-tight">Yeshua High School</span>
-              <span className="text-xs text-gray-500 font-medium tracking-wide">Excellence in Education</span>
-            </div>
           </Link>
 
           <button
@@ -50,14 +46,13 @@ export default function Header({ currentPage = 'home' }: HeaderProps) {
             <i className={`fas ${mobileMenuOpen ? 'fa-times' : 'fa-bars'} text-2xl`}></i>
           </button>
 
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-6">
             {navLinks.map((link) => (
               <Link
                 key={link.id}
                 href={link.href}
-                className={`nav-link px-4 py-2 rounded-lg ${
-                  currentPage === link.id ? 'active bg-red-50' : 'hover:bg-gray-50'
-                }`}
+                className={`nav-link px-4 py-6 rounded-lg ${currentPage === link.id ? 'active bg-red-50' : 'hover:bg-gray-50'
+                  }`}
               >
                 {link.label}
               </Link>
@@ -74,19 +69,17 @@ export default function Header({ currentPage = 'home' }: HeaderProps) {
           </div>
         </div>
 
-        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
-        }`}>
+        <div className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+          }`}>
           <div className="py-4 border-t border-gray-100 space-y-1">
             {navLinks.map((link) => (
               <Link
                 key={link.id}
                 href={link.href}
-                className={`block px-4 py-3 rounded-lg transition-all duration-200 ${
-                  currentPage === link.id 
-                    ? 'bg-red-50 text-red-600 font-semibold border-l-4 border-red-600' 
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-[#a73434]'
-                }`}
+                className={`block px-4 py-3 rounded-lg transition-all duration-200 ${currentPage === link.id
+                  ? 'bg-red-50 text-red-600 font-semibold border-l-4 border-red-600'
+                  : 'text-gray-600 hover:bg-gray-50 hover:text-[#a73434]'
+                  }`}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 {link.label}
