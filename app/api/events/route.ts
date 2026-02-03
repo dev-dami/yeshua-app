@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 
 export async function GET(request: Request) {
   try {
@@ -46,7 +47,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Title and event date are required' }, { status: 400 })
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('events')
       .insert([{ 
         title, 
@@ -85,7 +86,7 @@ export async function PUT(request: Request) {
     if (image_url !== undefined) updateData.image_url = image_url
     if (is_active !== undefined) updateData.is_active = is_active
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('events')
       .update(updateData)
       .eq('id', id)
@@ -108,7 +109,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'ID is required' }, { status: 400 })
     }
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('events')
       .delete()
       .eq('id', parseInt(id))

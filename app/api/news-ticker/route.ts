@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '@/lib/supabase'
+import { supabaseAdmin } from '@/lib/supabase-admin'
 
 export async function GET() {
   try {
@@ -24,7 +25,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 })
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('news_ticker')
       .insert([{ message, is_active }])
       .select()
@@ -50,7 +51,7 @@ export async function PUT(request: Request) {
     if (message !== undefined) updateData.message = message
     if (is_active !== undefined) updateData.is_active = is_active
 
-    const { data, error } = await supabase
+    const { data, error } = await supabaseAdmin
       .from('news_ticker')
       .update(updateData)
       .eq('id', id)
@@ -73,7 +74,7 @@ export async function DELETE(request: Request) {
       return NextResponse.json({ error: 'ID is required' }, { status: 400 })
     }
 
-    const { error } = await supabase
+    const { error } = await supabaseAdmin
       .from('news_ticker')
       .delete()
       .eq('id', parseInt(id))
