@@ -1,0 +1,23 @@
+lib/db/index.ts
+  42a3695adca35709 8-9,11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "2838d22654a9bb571f10a8816c93f996a5409f0f",
+  "prompts": {
+    "42a3695adca35709": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "opencode-transcript-ses_3dd089865ffea4Pon0eY35BoAR-b6ec6b6f-e94b-48d0-9de3-90b2d0a67cd7",
+        "model": "unknown"
+      },
+      "human_author": "dev-dami <damiade5banjo@gmail.com>",
+      "messages": [],
+      "total_additions": 5,
+      "total_deletions": 1,
+      "accepted_lines": 3,
+      "overriden_lines": 0
+    }
+  }
+}
