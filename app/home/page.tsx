@@ -16,33 +16,6 @@ interface EventType {
   imageUrl: string | null
 }
 
-const fallbackEvents: EventType[] = [
-  {
-    id: 1,
-    title: 'Cultural Day',
-    description: 'The Valedictory Service and Anniversary celebration is a remarkable event.',
-    eventDate: '2025-09-17',
-    eventTime: '10:00',
-    imageUrl: '/images/43.jpeg',
-  },
-  {
-    id: 2,
-    title: 'Talent Hunt',
-    description: 'Celebrate student innovation at our science fair.',
-    eventDate: '2025-07-19',
-    eventTime: '09:00',
-    imageUrl: '/images/41.jpeg',
-  },
-  {
-    id: 3,
-    title: 'Musical Display',
-    description: 'Showcasing the students\' musical talents.',
-    eventDate: '2025-07-19',
-    eventTime: '14:00',
-    imageUrl: '/images/music 1.jpeg',
-  },
-]
-
 function formatDate(dateStr: string) {
   const date = new Date(dateStr)
   return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric' })
@@ -58,8 +31,11 @@ function formatTime(timeStr: string | null) {
 }
 
 export default function HomePage() {
+  const heroRef = useRef<HTMLElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
-  const [events, setEvents] = useState<EventType[]>(fallbackEvents)
+  const [events, setEvents] = useState<EventType[]>([])
+  const [eventsLoading, setEventsLoading] = useState(true)
+  const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -69,20 +45,41 @@ export default function HomePage() {
   })
 
   useEffect(() => {
-    const video = videoRef.current
-    if (video) {
-      video.play().catch(() => {
-        // Autoplay blocked, user interaction required
-      })
-    }
-
     fetch('/api/events')
       .then(res => res.json())
-      .then(data => {
-        if (data.length > 0) setEvents(data)
-      })
-      .catch(() => {})
+      .then(data => setEvents(data))
+      .catch(() => setEvents([]))
+      .finally(() => setEventsLoading(false))
   }, [])
+
+  useEffect(() => {
+    if (shouldLoadVideo) return
+    const hero = heroRef.current
+    if (!hero) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setShouldLoadVideo(true)
+          observer.disconnect()
+        }
+      },
+      { rootMargin: '200px' }
+    )
+
+    observer.observe(hero)
+    return () => observer.disconnect()
+  }, [shouldLoadVideo])
+
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || !shouldLoadVideo) return
+
+    video.load()
+    video.play().catch(() => {
+      // Autoplay blocked, user interaction required
+    })
+  }, [shouldLoadVideo])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
@@ -95,17 +92,18 @@ export default function HomePage() {
       <NewsTicker />
       <Header currentPage="home" />
 
-      <section id="home" className="relative flex items-center h-[180vh] w-full">
+      <section id="home" ref={heroRef} className="relative flex items-center h-[180vh] w-full">
         <video
           ref={videoRef}
           autoPlay
           loop
           muted
           playsInline
-          preload="auto"
+          preload={shouldLoadVideo ? 'auto' : 'none'}
+          poster="/images/43.jpeg"
           className="absolute inset-0 w-full h-full object-cover object-top"
         >
-          <source src="/videos/cultural.mp4" type="video/mp4" />
+          {shouldLoadVideo ? <source src="/videos/cultural.mp4" type="video/mp4" /> : null}
         </video>
         <div className="absolute inset-0 hero-overlay"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
@@ -576,39 +574,50 @@ export default function HomePage() {
             <div className="section-underline mt-6"></div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
-            {events.map((event) => (
-              <div key={event.id} className="bg-white rounded-lg overflow-hidden shadow-sm smooth-transition card-hover">
-                <div className="relative">
-                  <Image
-                    src={event.imageUrl || '/images/43.jpeg'}
-                    alt={event.title}
-                    width={400}
-                    height={200}
-                    className="w-full h-48 object-cover"
-                  />
-                  <div className="absolute top-4 left-4 bg-white text-[#a73434] px-3 py-1 rounded-full text-sm font-semibold">
-                    {formatDate(event.eventDate)}
+          {eventsLoading ? (
+            <div className="flex justify-center items-center py-16">
+              <div className="w-12 h-12 border-4 border-[#a73434] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : events.length === 0 ? (
+            <div className="text-center py-16">
+              <i className="fas fa-calendar-times text-4xl text-gray-300 mb-4"></i>
+              <p className="text-gray-500">No upcoming events at the moment.</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-10">
+              {events.map((event) => (
+                <div key={event.id} className="bg-white rounded-lg overflow-hidden shadow-sm smooth-transition card-hover">
+                  <div className="relative">
+                    <Image
+                      src={event.imageUrl || '/images/43.jpeg'}
+                      alt={event.title}
+                      width={400}
+                      height={200}
+                      className="w-full h-48 object-cover"
+                    />
+                    <div className="absolute top-4 left-4 bg-white text-[#a73434] px-3 py-1 rounded-full text-sm font-semibold">
+                      {formatDate(event.eventDate)}
+                    </div>
+                  </div>
+                  <div className="p-6">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">{event.title}</h3>
+                    {event.eventTime && (
+                      <div className="flex items-center text-gray-600 text-sm mb-4">
+                        <i className="far fa-clock mr-2"></i>
+                        <span>{formatTime(event.eventTime)}</span>
+                      </div>
+                    )}
+                    {event.description && (
+                      <p className="text-gray-600 mb-4 line-clamp-3">{event.description}</p>
+                    )}
+                    <button className="text-[#a73434] hover:text-[#8f2c2c] font-medium text-sm flex items-center">
+                      Learn More <i className="fas fa-arrow-right ml-1"></i>
+                    </button>
                   </div>
                 </div>
-                <div className="p-6">
-                  <h3 className="text-xl font-bold text-gray-800 mb-2">{event.title}</h3>
-                  {event.eventTime && (
-                    <div className="flex items-center text-gray-600 text-sm mb-4">
-                      <i className="far fa-clock mr-2"></i>
-                      <span>{formatTime(event.eventTime)}</span>
-                    </div>
-                  )}
-                  {event.description && (
-                    <p className="text-gray-600 mb-4 line-clamp-3">{event.description}</p>
-                  )}
-                  <button className="text-[#a73434] hover:text-[#8f2c2c] font-medium text-sm flex items-center">
-                    Learn More <i className="fas fa-arrow-right ml-1"></i>
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
 
           <div className="text-center">
             <Link

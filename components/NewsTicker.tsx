@@ -19,10 +19,7 @@ export default function NewsTicker() {
         setLoading(false)
       })
       .catch(() => {
-        setNewsItems([
-          { id: 1, message: 'Welcome to Yeshua High School' },
-          { id: 2, message: 'Registration for new students ongoing' },
-        ])
+        setNewsItems([])
         setLoading(false)
       })
   }, [])
@@ -38,6 +35,10 @@ export default function NewsTicker() {
     )
   }
 
+  if (newsItems.length === 0) {
+    return null
+  }
+
   return (
     <div className="bg-[#a73434] text-white py-2 ticker-wrap">
       <div className="ticker text-sm">
@@ -47,7 +48,6 @@ export default function NewsTicker() {
             {item.message} {index < newsItems.length - 1 ? '|' : ''}
           </span>
         ))}
-        <span>.......</span>
       </div>
     </div>
   )

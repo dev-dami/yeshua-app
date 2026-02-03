@@ -51,56 +51,34 @@ function EventCard({ event }: { event: Event }) {
   )
 }
 
-const fallbackEvents = [
-  {
-    id: 1,
-    title: 'Cultural Day',
-    description: 'The Valedictory Service and Anniversary celebration is a remarkable event marked by heartfelt speeches, joyful reflection, and the celebration of excellence.',
-    eventDate: '2025-09-17',
-    eventTime: '10:00',
-    location: null,
-    imageUrl: '/images/43.jpeg',
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: 2,
-    title: 'Talent Hunt',
-    description: 'Celebrate student innovation at our science fair featuring projects from all grade levels.',
-    eventDate: '2025-07-19',
-    eventTime: '09:00',
-    location: null,
-    imageUrl: '/images/41.jpeg',
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-  {
-    id: 3,
-    title: 'Musical Display',
-    description: 'The musical display lit up the atmosphere with vibrant rhythms and harmonies, showcasing the students\' talents.',
-    eventDate: '2025-07-19',
-    eventTime: '14:00',
-    location: null,
-    imageUrl: '/images/music 1.jpeg',
-    isActive: true,
-    createdAt: new Date(),
-    updatedAt: new Date(),
-  },
-]
-
 export default async function EventsSection() {
   let events: Event[] = []
   
   try {
     events = await getActiveEvents(3)
   } catch {
-    events = fallbackEvents as Event[]
+    events = []
   }
 
   if (events.length === 0) {
-    events = fallbackEvents as Event[]
+    return (
+      <section id="events" className="py-20 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-1 bg-[#a73434]/10 rounded-full text-[#a73434] text-sm font-semibold mb-4">
+              What&apos;s Happening
+            </span>
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-800 mb-4">
+              Upcoming <span className="gradient-text">Events</span>
+            </h2>
+            <div className="section-underline mt-6"></div>
+          </div>
+          <div className="text-center py-12">
+            <p className="text-gray-500">No upcoming events at the moment.</p>
+          </div>
+        </div>
+      </section>
+    )
   }
 
   return (
