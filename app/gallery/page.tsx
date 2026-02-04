@@ -30,7 +30,13 @@ export default function GalleryPage() {
   useEffect(() => {
     fetch('/api/gallery')
       .then(res => res.json())
-      .then(data => setImages(data))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setImages(data)
+        } else {
+          setImages([])
+        }
+      })
       .catch(() => setImages([]))
       .finally(() => setLoading(false))
   }, [])

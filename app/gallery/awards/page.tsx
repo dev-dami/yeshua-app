@@ -32,7 +32,13 @@ export default function AwardsPage() {
   useEffect(() => {
     fetch('/api/awards')
       .then(res => res.json())
-      .then(data => setAwards(data))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setAwards(data)
+        } else {
+          setAwards([])
+        }
+      })
       .catch(() => setAwards([]))
       .finally(() => setLoading(false))
   }, [])

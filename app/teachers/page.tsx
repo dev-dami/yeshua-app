@@ -19,14 +19,20 @@ export default function TeachersPage() {
   useEffect(() => {
     fetch('/api/teachers')
       .then(res => res.json())
-      .then(data => setTeachers(data))
+      .then(data => {
+        if (Array.isArray(data)) {
+          setTeachers(data)
+        } else {
+          setTeachers([])
+        }
+      })
       .catch(() => setTeachers([]))
       .finally(() => setLoading(false))
   }, [])
 
   return (
     <div className="font-sans antialiased">
-      <Header currentPage="gallery" />
+      <Header currentPage="teachers" />
 
       <section
         className="relative py-32 text-white"
