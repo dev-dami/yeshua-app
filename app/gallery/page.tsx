@@ -1,12 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
-const galleryImages = Array.from({ length: 35 }, (_, i) => `${i + 1}.jpeg`)
+interface GalleryImage {
+  id: number
+  title: string | null
+  imageUrl: string
+  category: string | null
+  isActive: boolean
+}
 
 const categories = [
   { id: 'all', label: 'All Photos' },
@@ -18,6 +24,20 @@ const categories = [
 export default function GalleryPage() {
   const [lightboxImage, setLightboxImage] = useState<string | null>(null)
   const [activeCategory, setActiveCategory] = useState('all')
+  const [images, setImages] = useState<GalleryImage[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/gallery')
+      .then(res => res.json())
+      .then(data => setImages(data))
+      .catch(() => setImages([]))
+      .finally(() => setLoading(false))
+  }, [])
+
+  const filteredImages = activeCategory === 'all' 
+    ? images 
+    : images.filter(img => img.category === activeCategory)
 
   return (
     <div className="font-sans antialiased">
@@ -71,30 +91,45 @@ export default function GalleryPage() {
             ))}
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {galleryImages.map((img) => (
-              <button
-                key={img}
-                onClick={() => setLightboxImage(`/images/${img}`)}
-                className="relative group overflow-hidden rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#a73434] aspect-square"
-              >
-                <Image
-                  src={`/images/${img}`}
-                  alt="Gallery image"
-                  width={300}
-                  height={300}
-                  className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="bg-white/20 backdrop-blur-sm p-4 rounded-full">
-                      <i className="fas fa-search-plus text-white text-xl"></i>
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="w-12 h-12 border-4 border-[#a73434] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : filteredImages.length === 0 ? (
+            <div className="text-center py-20">
+              <i className="fas fa-images text-6xl text-gray-300 mb-4"></i>
+              <p className="text-gray-500 text-lg">No photos available yet.</p>
+              <p className="text-gray-400 text-sm mt-2">Check back soon for updates!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {filteredImages.map((img) => (
+                <button
+                  key={img.id}
+                  onClick={() => setLightboxImage(img.imageUrl)}
+                  className="relative group overflow-hidden rounded-xl cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#a73434] aspect-square"
+                >
+                  <img
+                    src={img.imageUrl}
+                    alt={img.title || 'Gallery image'}
+                    className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="bg-white/20 backdrop-blur-sm p-4 rounded-full">
+                        <i className="fas fa-search-plus text-white text-xl"></i>
+                      </div>
                     </div>
+                    {img.title && (
+                      <div className="absolute bottom-3 left-3 right-3">
+                        <p className="text-white text-sm font-medium truncate">{img.title}</p>
+                      </div>
+                    )}
                   </div>
-                </div>
-              </button>
-            ))}
-          </div>
+                </button>
+              ))}
+            </div>
+          )}
 
           <div className="text-center mt-12">
             <Link
@@ -190,12 +225,10 @@ export default function GalleryPage() {
             <i className="fas fa-times text-3xl"></i>
           </button>
           <div className="relative max-w-5xl max-h-[90vh] w-full">
-            <Image
+            <img
               src={lightboxImage}
               alt="Gallery image"
-              width={1200}
-              height={800}
-              className="w-full h-auto max-h-[90vh] object-contain rounded-lg"
+              className="w-full h-auto max-h-[90vh] object-contain rounded-lg mx-auto"
               onClick={(e) => e.stopPropagation()}
             />
           </div>

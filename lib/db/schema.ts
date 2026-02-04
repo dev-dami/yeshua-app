@@ -49,5 +49,16 @@ export type Event = typeof events.$inferSelect
 export type InsertEvent = typeof events.$inferInsert
 export type Award = typeof awards.$inferSelect
 export type InsertAward = typeof awards.$inferInsert
+export const gallery = pgTable('gallery', {
+  id: serial('id').primaryKey(),
+  title: text('title'),
+  imageUrl: text('image_url').notNull(),
+  category: text('category'),
+  isActive: boolean('is_active').default(true),
+  createdAt: timestamp('created_at').defaultNow(),
+})
+
 export type Teacher = typeof teachers.$inferSelect
 export type InsertTeacher = typeof teachers.$inferInsert
+export type Gallery = typeof gallery.$inferSelect
+export type InsertGallery = typeof gallery.$inferInsert

@@ -1,19 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 
-const galleryItems = [
-  { image: '44.jpeg', title: 'Award Ceremony 2023', subtitle: 'Outstanding Achievement in Science', category: 'awards', date: 'May 15, 2023', description: 'Sarah Johnson receives the prestigious Bright Minds Science Award for her groundbreaking research.' },
-  { image: 'sport 1.jpeg', title: 'State Champions', subtitle: 'Our basketball team wins state finals', category: 'sports', date: 'March 22, 2023', description: 'The Panthers bring home the state championship trophy after an incredible season.' },
-  { image: '45.jpeg', title: 'Spring Art Show', subtitle: 'Student creativity on display', category: 'arts', date: 'April 5, 2023', description: 'Annual student art exhibition showcasing impressive works from our talented young artists.' },
-  { image: '46.jpeg', title: 'Science Fair Winners', subtitle: 'Innovative student projects', category: 'academics', date: 'February 18, 2023', description: 'Students display their scientific research at our annual science fair competition.' },
-  { image: 'music 1.jpeg', title: 'Winter Musical', subtitle: 'Students perform "The Sound of Music"', category: 'events', date: 'December 10, 2022', description: 'Our talented performers bring the classic musical to life in this spectacular production.' },
-  { image: '47.jpeg', title: 'Track & Field Day', subtitle: 'Annual athletic competition', category: 'sports', date: 'June 3, 2023', description: 'Students compete in various track and field events at our annual sports day celebration.' },
-]
+interface AwardItem {
+  id: number
+  title: string
+  description: string | null
+  category: string
+  imageUrl: string | null
+  awardDate: string | null
+  isActive: boolean
+}
 
 const featuredStudents = [
   { image: '6.jpeg', name: 'Student One', title: 'Valedictorian, Class of 2023', quote: "I'm grateful for the inspiring teachers who challenged me to reach my potential.", tags: ['Mathematics', 'Debate'] },
@@ -25,10 +26,20 @@ const filters = ['all', 'sports', 'arts', 'academics', 'events', 'awards']
 
 export default function AwardsPage() {
   const [activeFilter, setActiveFilter] = useState('all')
+  const [awards, setAwards] = useState<AwardItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    fetch('/api/awards')
+      .then(res => res.json())
+      .then(data => setAwards(data))
+      .catch(() => setAwards([]))
+      .finally(() => setLoading(false))
+  }, [])
 
   const filteredItems = activeFilter === 'all'
-    ? galleryItems
-    : galleryItems.filter(item => item.category === activeFilter)
+    ? awards
+    : awards.filter(item => item.category === activeFilter)
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
@@ -39,6 +50,11 @@ export default function AwardsPage() {
       events: 'text-[#a73434] bg-[#a73434]/10',
     }
     return colors[category] || 'text-gray-600 bg-gray-50'
+  }
+
+  const formatDate = (dateStr: string | null) => {
+    if (!dateStr) return null
+    return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
   }
 
   return (
@@ -91,37 +107,54 @@ export default function AwardsPage() {
 
       <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredItems.map((item, index) => (
-              <div
-                key={index}
-                className="card-enhanced overflow-hidden group"
-              >
-                <div className="relative h-60 overflow-hidden">
-                  <Image
-                    src={`/images/${item.image}`}
-                    alt={item.title}
-                    fill
-                    className="object-cover transition-transform duration-500 group-hover:scale-110"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
-                  <div className="absolute bottom-0 left-0 right-0 p-5">
-                    <h3 className="text-white font-bold text-lg">{item.title}</h3>
-                    <p className="text-gray-200 text-sm">{item.subtitle}</p>
+          {loading ? (
+            <div className="flex justify-center items-center py-20">
+              <div className="w-12 h-12 border-4 border-[#a73434] border-t-transparent rounded-full animate-spin"></div>
+            </div>
+          ) : filteredItems.length === 0 ? (
+            <div className="text-center py-20">
+              <i className="fas fa-trophy text-6xl text-gray-300 mb-4"></i>
+              <p className="text-gray-500 text-lg">No awards in this category yet.</p>
+              <p className="text-gray-400 text-sm mt-2">Check back for updates!</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredItems.map((item) => (
+                <div key={item.id} className="card-enhanced overflow-hidden group">
+                  <div className="relative h-60 overflow-hidden bg-gray-100">
+                    {item.imageUrl ? (
+                      <img
+                        src={item.imageUrl}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-200 to-gray-300">
+                        <i className="fas fa-trophy text-5xl text-gray-400"></i>
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                    <div className="absolute bottom-0 left-0 right-0 p-5">
+                      <h3 className="text-white font-bold text-lg">{item.title}</h3>
+                    </div>
+                  </div>
+                  <div className="p-5">
+                    <div className="flex justify-between items-center mb-3">
+                      <span className={`text-xs px-3 py-1 rounded-full capitalize font-medium ${getCategoryColor(item.category)}`}>
+                        {item.category}
+                      </span>
+                      {item.awardDate && (
+                        <span className="text-xs text-gray-500">{formatDate(item.awardDate)}</span>
+                      )}
+                    </div>
+                    {item.description && (
+                      <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
+                    )}
                   </div>
                 </div>
-                <div className="p-5">
-                  <div className="flex justify-between items-center mb-3">
-                    <span className={`text-xs px-3 py-1 rounded-full capitalize font-medium ${getCategoryColor(item.category)}`}>
-                      {item.category}
-                    </span>
-                    <span className="text-xs text-gray-500">{item.date}</span>
-                  </div>
-                  <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 
