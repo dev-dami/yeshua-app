@@ -1,0 +1,23 @@
+app/gallery/page.tsx
+  6dacda5d868a06fd 57,63,67-70
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "a32c7cd436633b2b4494691c0a1726dc874ee0dc",
+  "prompts": {
+    "6dacda5d868a06fd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "opencode-transcript-ses_3dd089865ffea4Pon0eY35BoAR-26c9f3a3-65f6-49e2-b6f6-9dcfcb647e18",
+        "model": "unknown"
+      },
+      "human_author": "dev-dami <damiade5banjo@gmail.com>",
+      "messages": [],
+      "total_additions": 6,
+      "total_deletions": 3,
+      "accepted_lines": 6,
+      "overriden_lines": 0
+    }
+  }
+}
