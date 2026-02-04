@@ -1,0 +1,38 @@
+app/teachers/page.tsx
+  962cfadbc18ebce5 35
+app/gallery/page.tsx
+  6d3c167f25e696dc 33-39
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.0.42",
+  "base_commit_sha": "6f3ae5ebb592ab0601b6e40f20c3ff57e181ba23",
+  "prompts": {
+    "6d3c167f25e696dc": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "opencode-transcript-ses_3dd089865ffea4Pon0eY35BoAR-9c7430ea-1863-4095-aa15-65088c234bd2",
+        "model": "unknown"
+      },
+      "human_author": "dev-dami <damiade5banjo@gmail.com>",
+      "messages": [],
+      "total_additions": 7,
+      "total_deletions": 1,
+      "accepted_lines": 7,
+      "overriden_lines": 0
+    },
+    "962cfadbc18ebce5": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "opencode-transcript-ses_3dd089865ffea4Pon0eY35BoAR-b610e5e5-6d85-421b-a60b-7726a8dcc64c",
+        "model": "unknown"
+      },
+      "human_author": "dev-dami <damiade5banjo@gmail.com>",
+      "messages": [],
+      "total_additions": 1,
+      "total_deletions": 1,
+      "accepted_lines": 1,
+      "overriden_lines": 0
+    }
+  }
+}
