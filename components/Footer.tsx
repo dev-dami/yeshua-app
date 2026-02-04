@@ -77,13 +77,8 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="#" className="hover:text-white smooth-transition">
-                  School Directory
-                </Link>
-              </li>
-              <li>
-                <Link href="#" className="hover:text-white smooth-transition">
-                  Employment
+                <Link href="/apply" className="hover:text-white smooth-transition">
+                  Apply Now
                 </Link>
               </li>
             </ul>
@@ -122,24 +117,12 @@ export default function Footer() {
                   <i className="fab fa-facebook-f"></i>
                 </a>
                 <a
-                  href="#"
-                  className="bg-blue-400 text-white p-3 rounded-full hover:bg-blue-500 smooth-transition"
-                >
-                  <i className="fab fa-twitter"></i>
-                </a>
-                <a
                   href="https://www.instagram.com/yeshuahigh?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
                   target="_blank"
                   rel="noopener noreferrer"
                   className="bg-pink-600 text-white p-3 rounded-full hover:bg-pink-700 smooth-transition"
                 >
                   <i className="fab fa-instagram"></i>
-                </a>
-                <a
-                  href="#"
-                  className="bg-red-600 text-white p-3 rounded-full hover:bg-red-700 smooth-transition"
-                >
-                  <i className="fab fa-youtube"></i>
                 </a>
               </div>
             </div>

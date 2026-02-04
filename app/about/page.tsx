@@ -78,7 +78,7 @@ export default function AboutPage() {
               </div>
               
               <div className="mt-8 bg-[#a73434]/5 border-l-4 border-[#a73434] p-6 rounded-r-lg">
-                <h4 className="font-bold text-gray-800 mb-3">Student Declaration</h4>
+                <h4 className="font-bold text-gray-800 mb-3">Student Commitment</h4>
                 <ul className="text-gray-700 space-y-1 font-medium text-sm">
                   <li>I AM UNIQUE</li>
                   <li>I AM SPECIAL TO GOD</li>
@@ -87,7 +87,7 @@ export default function AboutPage() {
                   <li>I WILL BE GREAT</li>
                   <li>I WILL DISCOVER AND FULFILL GOD&apos;S PURPOSE FOR MY LIFE</li>
                   <li>I WILL IMPACT THE WORLD</li>
-                  <li>I WILL BE CELEBRATED. AMEN...</li>
+                  <li>I WILL BE CELEBRATED</li>
                 </ul>
               </div>
             </div>
@@ -137,16 +137,13 @@ export default function AboutPage() {
               <h3 className="text-xl font-bold text-gray-800 mb-4">Core Values</h3>
               <ul className="text-gray-600 space-y-2">
                 <li className="flex items-center">
-                  <i className="fas fa-check-circle text-[#a73434] mr-2"></i>Integrity in all endeavors
+                  <i className="fas fa-check-circle text-[#a73434] mr-2"></i>Godliness
                 </li>
                 <li className="flex items-center">
-                  <i className="fas fa-check-circle text-[#a73434] mr-2"></i>Respect for self and others
+                  <i className="fas fa-check-circle text-[#a73434] mr-2"></i>Academic Excellence
                 </li>
                 <li className="flex items-center">
-                  <i className="fas fa-check-circle text-[#a73434] mr-2"></i>Commitment to excellence
-                </li>
-                <li className="flex items-center">
-                  <i className="fas fa-check-circle text-[#a73434] mr-2"></i>Joy in learning and discovery
+                  <i className="fas fa-check-circle text-[#a73434] mr-2"></i>Life Accomplishments
                 </li>
               </ul>
             </div>
@@ -252,9 +249,8 @@ export default function AboutPage() {
                 <Image
                   src="/images/Director Picture.webp"
                   alt="Pastor Timilehin Adigun"
-                  width={400}
-                  height={288}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  fill
+                  className="object-cover object-top transition-transform duration-500 group-hover:scale-110"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
               </div>
@@ -314,7 +310,7 @@ export default function AboutPage() {
               Schedule a Tour
             </Link>
             <Link
-              href="/home#admissions"
+              href="/apply"
               className="btn-secondary inline-flex items-center justify-center"
             >
               <i className="fas fa-file-alt mr-2"></i>

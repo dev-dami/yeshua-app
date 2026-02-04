@@ -35,7 +35,7 @@ export default function HomePage() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [events, setEvents] = useState<EventType[]>([])
   const [eventsLoading, setEventsLoading] = useState(true)
-  const [shouldLoadVideo, setShouldLoadVideo] = useState(false)
+  const [shouldLoadVideo] = useState(true)
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -53,24 +53,7 @@ export default function HomePage() {
       .finally(() => setEventsLoading(false))
   }, [])
 
-  useEffect(() => {
-    if (shouldLoadVideo) return
-    const hero = heroRef.current
-    if (!hero) return
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setShouldLoadVideo(true)
-          observer.disconnect()
-        }
-      },
-      { rootMargin: '200px' }
-    )
-
-    observer.observe(hero)
-    return () => observer.disconnect()
-  }, [shouldLoadVideo])
 
   useEffect(() => {
     const video = videoRef.current
@@ -100,11 +83,10 @@ export default function HomePage() {
           loop
           muted
           playsInline
-          preload={shouldLoadVideo ? 'auto' : 'none'}
-          poster="/images/43.jpeg"
+          preload="auto"
           className="absolute inset-0 w-full h-full object-cover object-top"
         >
-          {shouldLoadVideo ? <source src="/videos/cultural.mp4" type="video/mp4" /> : null}
+          <source src="/videos/cultural.mp4" type="video/mp4" />
         </video>
         <div className="absolute inset-0 hero-overlay"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
@@ -121,10 +103,10 @@ export default function HomePage() {
               focused on making education fun and practical for our students.
             </p>
             <div className="flex flex-col sm:flex-row justify-center gap-4 fade-in-up delay-300">
-              <a href="#admissions" className="btn-accent inline-flex items-center justify-center">
+              <Link href="/apply" className="btn-accent inline-flex items-center justify-center">
                 <i className="fas fa-paper-plane mr-2"></i>
                 Apply Now
-              </a>
+              </Link>
               <button className="btn-secondary inline-flex items-center justify-center bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white hover:text-[#a73434]">
                 <i className="fas fa-play-circle mr-2"></i>
                 Take a Virtual Tour
@@ -398,13 +380,12 @@ export default function HomePage() {
                       required
                     >
                       <option value="">Select grade level</option>
-                      <option value="Pre-K">Pre-K</option>
-                      <option value="K">Kindergarten</option>
-                      {[...Array(12)].map((_, i) => (
-                        <option key={i + 1} value={String(i + 1)}>
-                          Year {i + 1}
-                        </option>
-                      ))}
+                      <option value="JSS1">JSS1</option>
+                      <option value="JSS2">JSS2</option>
+                      <option value="JSS3">JSS3</option>
+                      <option value="SS1">SS1</option>
+                      <option value="SS2">SS2</option>
+                      <option value="SS3">SS3</option>
                     </select>
                   </div>
 
@@ -434,12 +415,18 @@ export default function HomePage() {
 
           <div className="text-center">
             <h3 className="text-2xl font-bold text-gray-800 mb-6">Ready to Apply?</h3>
-            <button className="bg-red-600 hover:bg-red-800 text-white px-8 py-3 rounded-md font-medium smooth-transition mr-4">
+            <Link
+              href="/apply"
+              className="bg-red-600 hover:bg-red-800 text-white px-8 py-3 rounded-md font-medium smooth-transition mr-4 inline-block"
+            >
               Start Application
-            </button>
-            <button className="bg-white border-2 border-red-600 text-red-600 hover:bg-red-50 px-8 py-3 rounded-md font-medium smooth-transition">
+            </Link>
+            <a
+              href="#contact"
+              className="bg-white border-2 border-red-600 text-red-600 hover:bg-red-50 px-8 py-3 rounded-md font-medium smooth-transition inline-block"
+            >
               Schedule a Visit
-            </button>
+            </a>
           </div>
         </div>
       </section>

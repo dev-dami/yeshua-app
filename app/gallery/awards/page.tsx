@@ -3,6 +3,8 @@
 import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import Header from '@/components/Header'
+import Footer from '@/components/Footer'
 
 const galleryItems = [
   { image: '44.jpeg', title: 'Award Ceremony 2023', subtitle: 'Outstanding Achievement in Science', category: 'awards', date: 'May 15, 2023', description: 'Sarah Johnson receives the prestigious Bright Minds Science Award for her groundbreaking research.' },
@@ -30,63 +32,54 @@ export default function AwardsPage() {
 
   const getCategoryColor = (category: string) => {
     const colors: Record<string, string> = {
-      awards: 'text-red-600 bg-red-50',
+      awards: 'text-[#a73434] bg-[#a73434]/10',
       sports: 'text-green-600 bg-green-50',
       arts: 'text-purple-600 bg-purple-50',
       academics: 'text-blue-600 bg-blue-50',
-      events: 'text-red-600 bg-red-50',
+      events: 'text-[#a73434] bg-[#a73434]/10',
     }
     return colors[category] || 'text-gray-600 bg-gray-50'
   }
 
   return (
-    <div className="bg-gray-50 font-sans">
-      <header className="sticky top-0 z-10 bg-white shadow-sm">
-        <div className="container mx-auto px-4 py-4 flex justify-between items-center">
-          <div className="flex items-center space-x-2">
-            <Image src="/images/images-removebg-preview.png" width={50} height={50} alt="Logo" />
-            <h1 className="text-2xl font-bold gradient-text">Yeshua High School</h1>
-          </div>
-          <nav className="hidden md:block">
-            <ul className="flex space-x-8">
-              <li><Link href="/home" className="text-gray-700 hover:text-red-600 font-medium">Home</Link></li>
-              <li><Link href="/about" className="text-gray-700 hover:text-red-600 font-medium">About</Link></li>
-              <li><Link href="/gallery" className="text-red-600 font-medium">Gallery</Link></li>
-              <li><Link href="/home#events" className="text-gray-700 hover:text-red-600 font-medium">Events</Link></li>
-              <li><Link href="/home#contact" className="text-gray-700 hover:text-red-600 font-medium">Contact</Link></li>
-            </ul>
-          </nav>
-        </div>
-      </header>
+    <div className="font-sans antialiased">
+      <Header currentPage="gallery" />
 
-      <section className="relative py-16 md:py-24 bg-gradient-to-r from-red-500 to-white text-white">
-        <div className="absolute inset-0 bg-black opacity-20"></div>
-        <div className="container mx-auto px-4 relative z-10 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-4">
-            <span className="text-red-300">Awards</span> and Achievements
-          </h1>
-          <p className="text-lg md:text-xl max-w-2xl mx-auto mb-8">
+      <section
+        className="relative py-32 text-white"
+        style={{
+          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url(/images/44.jpeg)',
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+        }}
+      >
+        <div className="container mx-auto px-4 text-center">
+          <span className="inline-block px-4 py-2 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-6">
+            <i className="fas fa-trophy mr-2"></i>
+            Recognition
+          </span>
+          <h1 className="text-4xl md:text-6xl font-bold mb-4">Awards & Achievements</h1>
+          <p className="text-xl md:text-2xl max-w-3xl mx-auto text-gray-200 mb-8">
             Celebrating creativity, achievements, and memorable moments of our bright students.
           </p>
-          <div className="flex justify-center space-x-4">
-            <button className="bg-white text-red-600 px-6 py-2 rounded-full font-medium hover:bg-red-100 transition">
-              View Events
-            </button>
-          </div>
+          <Link href="/calendar" className="inline-flex items-center bg-white text-[#a73434] hover:bg-gray-100 px-6 py-3 rounded-full font-medium transition-all">
+            <i className="fas fa-calendar-alt mr-2"></i>
+            View Events
+          </Link>
         </div>
       </section>
 
-      <div className="bg-white shadow-sm sticky top-16 z-10">
-        <div className="container mx-auto px-4 py-3 overflow-x-auto">
-          <div className="flex space-x-1 md:space-x-4 justify-center md:justify-start">
+      <section className="py-6 bg-white border-b sticky top-[73px] z-40">
+        <div className="container mx-auto px-4">
+          <div className="flex flex-wrap gap-2 justify-center">
             {filters.map((filter) => (
               <button
                 key={filter}
                 onClick={() => setActiveFilter(filter)}
-                className={`px-4 py-2 rounded-full font-medium capitalize ${
+                className={`px-5 py-2 rounded-full font-medium capitalize transition-all ${
                   activeFilter === filter
-                    ? 'bg-red-100 text-red-600'
-                    : 'hover:bg-gray-100'
+                    ? 'bg-[#a73434] text-white shadow-lg'
+                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                 }`}
               >
                 {filter}
@@ -94,51 +87,63 @@ export default function AwardsPage() {
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      <section className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredItems.map((item, index) => (
-            <div
-              key={index}
-              className="gallery-item rounded-xl overflow-hidden bg-white shadow-md cursor-pointer"
-            >
-              <div className="relative overflow-hidden h-60">
-                <Image
-                  src={`/images/${item.image}`}
-                  alt={item.title}
-                  fill
-                  className="object-cover transition duration-500 hover:scale-110"
-                />
-                <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                  <h3 className="text-white font-bold text-lg">{item.title}</h3>
-                  <p className="text-gray-200 text-sm">{item.subtitle}</p>
+      <section className="py-16 bg-gradient-to-b from-gray-50 to-white">
+        <div className="container mx-auto px-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {filteredItems.map((item, index) => (
+              <div
+                key={index}
+                className="card-enhanced overflow-hidden group"
+              >
+                <div className="relative h-60 overflow-hidden">
+                  <Image
+                    src={`/images/${item.image}`}
+                    alt={item.title}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+                  <div className="absolute bottom-0 left-0 right-0 p-5">
+                    <h3 className="text-white font-bold text-lg">{item.title}</h3>
+                    <p className="text-gray-200 text-sm">{item.subtitle}</p>
+                  </div>
+                </div>
+                <div className="p-5">
+                  <div className="flex justify-between items-center mb-3">
+                    <span className={`text-xs px-3 py-1 rounded-full capitalize font-medium ${getCategoryColor(item.category)}`}>
+                      {item.category}
+                    </span>
+                    <span className="text-xs text-gray-500">{item.date}</span>
+                  </div>
+                  <p className="text-gray-600 text-sm leading-relaxed">{item.description}</p>
                 </div>
               </div>
-              <div className="p-4">
-                <div className="flex justify-between items-center mb-2">
-                  <span className={`text-xs px-2 py-1 rounded capitalize ${getCategoryColor(item.category)}`}>
-                    {item.category}
-                  </span>
-                  <span className="text-xs text-gray-500">{item.date}</span>
-                </div>
-                <p className="text-gray-700 text-sm">{item.description}</p>
-              </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
-      <section className="bg-indigo-50 py-16">
+      <section className="py-20 bg-gradient-to-br from-[#a73434]/5 to-white">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 gradient-text">Featured Students</h2>
+          <div className="text-center mb-16">
+            <span className="inline-block px-4 py-1 bg-[#a73434]/10 rounded-full text-[#a73434] text-sm font-semibold mb-4">
+              Excellence
+            </span>
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Featured <span className="gradient-text">Students</span>
+            </h2>
+            <div className="section-underline"></div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {featuredStudents.map((student, index) => (
               <div
                 key={index}
-                className="bg-white rounded-xl shadow-md overflow-hidden text-center p-8 transform transition hover:-translate-y-2"
+                className="bg-white rounded-2xl shadow-lg overflow-hidden text-center p-8 transform transition-all duration-300 hover:-translate-y-2 hover:shadow-xl"
               >
-                <div className="w-32 h-32 mx-auto rounded-full overflow-hidden border-4 border-indigo-100 mb-4 relative">
+                <div className="w-28 h-28 mx-auto rounded-full overflow-hidden border-4 border-[#a73434]/20 mb-5 relative">
                   <Image
                     src={`/images/${student.image}`}
                     alt={student.name}
@@ -146,12 +151,12 @@ export default function AwardsPage() {
                     className="object-cover"
                   />
                 </div>
-                <h3 className="text-xl font-bold mb-2">{student.name}</h3>
-                <p className="text-red-600 mb-3">{student.title}</p>
-                <p className="text-gray-600 mb-4">&quot;{student.quote}&quot;</p>
-                <div className="flex justify-center space-x-2">
+                <h3 className="text-xl font-bold text-gray-800 mb-1">{student.name}</h3>
+                <p className="text-[#a73434] font-medium mb-4">{student.title}</p>
+                <p className="text-gray-600 mb-5 italic">&quot;{student.quote}&quot;</p>
+                <div className="flex justify-center gap-2 flex-wrap">
                   {student.tags.map((tag) => (
-                    <span key={tag} className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded">
+                    <span key={tag} className="text-xs bg-[#a73434]/10 text-[#a73434] px-3 py-1 rounded-full font-medium">
                       {tag}
                     </span>
                   ))}
@@ -162,70 +167,32 @@ export default function AwardsPage() {
         </div>
       </section>
 
-      <footer className="bg-gray-900 text-white pt-12 pb-6">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
-            <div>
-              <h3 className="text-lg font-bold mb-4 flex items-center">Yeshua High School</h3>
-              <p className="text-gray-400">
-                Preparing students for success in college, career, and life through innovative education.
-              </p>
-              <div className="flex space-x-4 mt-4">
-                <a href="https://www.facebook.com/share/16dQhJoUFD/" className="text-gray-400 hover:text-white">
-                  <i className="fab fa-facebook-f"></i>
-                </a>
-                <a href="#" className="text-gray-400 hover:text-white"><i className="fab fa-twitter"></i></a>
-                <a href="https://www.instagram.com/yeshuahigh" className="text-gray-400 hover:text-white">
-                  <i className="fab fa-instagram"></i>
-                </a>
-              </div>
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-4">Quick Links</h3>
-              <ul className="space-y-2">
-                <li><Link href="/home" className="text-gray-400 hover:text-white">Home</Link></li>
-                <li><Link href="/about" className="text-gray-400 hover:text-white">About Us</Link></li>
-                <li><Link href="/home#programs" className="text-gray-400 hover:text-white">Academics</Link></li>
-                <li><Link href="/home#admissions" className="text-gray-400 hover:text-white">Admissions</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-4">Contact Us</h3>
-              <ul className="space-y-2 text-gray-400">
-                <li className="flex items-start">
-                  <i className="fas fa-map-marker-alt text-red-400 mt-1 mr-3"></i>
-                  7/9 Jide Sekoni Street, Behind Addide, Sabo-Ojodu, Lagos, Nigeria
-                </li>
-                <li className="flex items-center">
-                  <i className="fas fa-phone-alt text-red-400 mr-3"></i>
-                  08133398748, 09054009743
-                </li>
-                <li className="flex items-center">
-                  <i className="fas fa-envelope text-red-400 mr-3"></i>
-                  yeshuahighschool@yahoo.com
-                </li>
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-lg font-bold mb-4">Newsletter</h3>
-              <p className="text-gray-400 mb-3">Subscribe to our newsletter for updates and announcements.</p>
-              <form className="flex">
-                <input
-                  type="email"
-                  placeholder="Your email"
-                  className="px-4 py-2 rounded-l focus:outline-none text-gray-900 w-full"
-                />
-                <button className="bg-red-600 hover:bg-red-700 px-4 py-2 rounded-r">
-                  <i className="fas fa-paper-plane"></i>
-                </button>
-              </form>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 pt-6 text-center text-gray-400">
-            <p>&copy; {new Date().getFullYear()} Yeshua High School. All rights reserved.</p>
+      <section className="py-16 bg-white">
+        <div className="container mx-auto px-4 text-center">
+          <h2 className="text-2xl md:text-3xl font-bold text-gray-800 mb-4">Explore More</h2>
+          <p className="text-gray-600 mb-8 max-w-xl mx-auto">
+            Discover more moments from our vibrant school community
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/gallery"
+              className="btn-primary inline-flex items-center justify-center"
+            >
+              <i className="fas fa-images mr-2"></i>
+              View Full Gallery
+            </Link>
+            <Link
+              href="/teachers"
+              className="btn-secondary inline-flex items-center justify-center"
+            >
+              <i className="fas fa-chalkboard-teacher mr-2"></i>
+              Meet Our Teachers
+            </Link>
           </div>
         </div>
-      </footer>
+      </section>
+
+      <Footer />
     </div>
   )
 }
