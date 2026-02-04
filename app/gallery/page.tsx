@@ -1,49 +1,50 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import Image from 'next/image'
-import Link from 'next/link'
-import Header from '@/components/Header'
-import Footer from '@/components/Footer'
+import { useState, useEffect } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import Header from "@/components/Header";
+import Footer from "@/components/Footer";
 
 interface GalleryImage {
-  id: number
-  title: string | null
-  imageUrl: string
-  category: string | null
-  isActive: boolean
+  id: number;
+  title: string | null;
+  imageUrl: string;
+  category: string | null;
+  isActive: boolean;
 }
 
 const categories = [
-  { id: 'all', label: 'All Photos' },
-  { id: 'events', label: 'Events' },
-  { id: 'campus', label: 'Campus Life' },
-  { id: 'sports', label: 'Sports' },
-]
+  { id: "all", label: "All Photos" },
+  { id: "events", label: "Events" },
+  { id: "campus", label: "Campus Life" },
+  { id: "sports", label: "Sports" },
+];
 
 export default function GalleryPage() {
-  const [lightboxImage, setLightboxImage] = useState<string | null>(null)
-  const [activeCategory, setActiveCategory] = useState('all')
-  const [images, setImages] = useState<GalleryImage[]>([])
-  const [loading, setLoading] = useState(true)
+  const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [activeCategory, setActiveCategory] = useState("all");
+  const [images, setImages] = useState<GalleryImage[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/gallery')
-      .then(res => res.json())
-      .then(data => {
+    fetch("/api/gallery")
+      .then((res) => res.json())
+      .then((data) => {
         if (Array.isArray(data)) {
-          setImages(data)
+          setImages(data);
         } else {
-          setImages([])
+          setImages([]);
         }
       })
       .catch(() => setImages([]))
-      .finally(() => setLoading(false))
-  }, [])
+      .finally(() => setLoading(false));
+  }, []);
 
-  const filteredImages = activeCategory === 'all' 
-    ? images 
-    : images.filter(img => img.category === activeCategory)
+  const filteredImages =
+    activeCategory === "all"
+      ? images
+      : images.filter((img) => img.category === activeCategory);
 
   return (
     <div className="font-sans antialiased">
@@ -52,9 +53,10 @@ export default function GalleryPage() {
       <section
         className="relative py-28 md:py-36 text-white"
         style={{
-          backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(/images/music 1.jpeg)',
-          backgroundSize: 'cover',
-          backgroundPosition: 'center',
+          backgroundImage:
+            "linear-gradient(rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.65)), url(/images/music 1.jpeg)",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         }}
       >
         <div className="container mx-auto px-4 text-center">
@@ -62,11 +64,9 @@ export default function GalleryPage() {
             <i className="fas fa-images mr-2"></i>
             Photo Gallery
           </span>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            School Gallery
-          </h1>
           <p className="text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto text-gray-200 leading-relaxed">
-            Capturing memorable moments and celebrating our vibrant school community.
+            Capturing memorable moments and celebrating our vibrant school
+            community.
           </p>
         </div>
       </section>
@@ -93,8 +93,8 @@ export default function GalleryPage() {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-5 md:px-7 py-2.5 md:py-3 rounded-full font-medium text-sm md:text-base transition-all duration-300 ${
                   activeCategory === cat.id
-                    ? 'bg-[#a73434] text-white shadow-lg shadow-[#a73434]/25'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    ? "bg-[#a73434] text-white shadow-lg shadow-[#a73434]/25"
+                    : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
                 {cat.label}
@@ -109,8 +109,12 @@ export default function GalleryPage() {
           ) : filteredImages.length === 0 ? (
             <div className="text-center py-20">
               <i className="fas fa-images text-6xl text-gray-300 mb-6 block"></i>
-              <p className="text-gray-500 text-xl font-medium">No photos available yet.</p>
-              <p className="text-gray-400 text-base mt-2">Check back soon for updates!</p>
+              <p className="text-gray-500 text-xl font-medium">
+                No photos available yet.
+              </p>
+              <p className="text-gray-400 text-base mt-2">
+                Check back soon for updates!
+              </p>
             </div>
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
@@ -122,7 +126,7 @@ export default function GalleryPage() {
                 >
                   <img
                     src={img.imageUrl}
-                    alt={img.title || 'Gallery image'}
+                    alt={img.title || "Gallery image"}
                     className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -133,7 +137,9 @@ export default function GalleryPage() {
                     </div>
                     {img.title && (
                       <div className="absolute bottom-4 left-4 right-4">
-                        <p className="text-white text-base font-semibold truncate">{img.title}</p>
+                        <p className="text-white text-base font-semibold truncate">
+                          {img.title}
+                        </p>
                       </div>
                     )}
                   </div>
@@ -164,7 +170,8 @@ export default function GalleryPage() {
               Featured <span className="gradient-text">Collections</span>
             </h2>
             <p className="text-gray-600 text-lg max-w-2xl mx-auto mb-4">
-              Explore curated collections showcasing the best moments from our school community
+              Explore curated collections showcasing the best moments from our
+              school community
             </p>
             <div className="section-underline"></div>
           </div>
@@ -180,8 +187,12 @@ export default function GalleryPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                 <div className="absolute bottom-6 left-6 right-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">Cultural Events</h3>
-                  <p className="text-white/90 text-base">Celebrating our diverse heritage</p>
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    Cultural Events
+                  </h3>
+                  <p className="text-white/90 text-base">
+                    Celebrating our diverse heritage
+                  </p>
                 </div>
               </div>
             </div>
@@ -196,8 +207,12 @@ export default function GalleryPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                 <div className="absolute bottom-6 left-6 right-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">Sports & Athletics</h3>
-                  <p className="text-white/90 text-base">Champions in the making</p>
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    Sports & Athletics
+                  </h3>
+                  <p className="text-white/90 text-base">
+                    Champions in the making
+                  </p>
                 </div>
               </div>
             </div>
@@ -212,8 +227,12 @@ export default function GalleryPage() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent"></div>
                 <div className="absolute bottom-6 left-6 right-6">
-                  <h3 className="text-2xl font-bold text-white mb-2">Academic Life</h3>
-                  <p className="text-white/90 text-base">Learning and growing together</p>
+                  <h3 className="text-2xl font-bold text-white mb-2">
+                    Academic Life
+                  </h3>
+                  <p className="text-white/90 text-base">
+                    Learning and growing together
+                  </p>
                 </div>
               </div>
             </div>
@@ -246,5 +265,5 @@ export default function GalleryPage() {
         </div>
       )}
     </div>
-  )
+  );
 }
