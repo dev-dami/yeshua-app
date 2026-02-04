@@ -60,11 +60,11 @@ export default function GalleryPage() {
         }}
       >
         <div className="container mx-auto px-4 text-center">
-          <span className="inline-block px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-full text-white/90 text-sm font-medium mb-8">
+          <span className="inline-block px-5 py-2.5 bg-white/10 backdrop-blur-sm rounded-full text-black text-sm font-medium mb-8">
             <i className="fas fa-images mr-2"></i>
             Photo Gallery
           </span>
-          <p className="text-lg sm:text-xl md:text-2xl max-w-3xl mx-auto text-gray-200 leading-relaxed">
+          <p className="text-lg sm:text-xl md:text-2xl max-w-xl mx-auto text-gray-500 leading-relaxed">
             Capturing memorable moments and celebrating our vibrant school
             community.
           </p>
