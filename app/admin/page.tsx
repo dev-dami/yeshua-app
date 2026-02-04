@@ -10,8 +10,8 @@ type Section = 'dashboard' | 'events' | 'news' | 'awards' | 'teachers' | 'galler
 interface NewsItem {
   id: number
   message: string
-  is_active: boolean
-  created_at: string
+  isActive: boolean
+  createdAt: string
 }
 
 interface EventItem {
@@ -325,9 +325,9 @@ export default function AdminPage() {
       const res = await fetch('/api/news-ticker', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: item.id, is_active: !item.is_active })
+        body: JSON.stringify({ id: item.id, is_active: !item.isActive })
       })
-      if (res.ok) { showToast(`News ${item.is_active ? 'deactivated' : 'activated'}`, 'success'); fetchNews() }
+      if (res.ok) { showToast(`News ${item.isActive ? 'deactivated' : 'activated'}`, 'success'); fetchNews() }
     } catch { showToast('Failed to update', 'error') }
   }
 
@@ -569,7 +569,7 @@ export default function AdminPage() {
     { id: 'gallery' as Section, label: 'Gallery', icon: 'fa-images' },
   ]
 
-  const activeNewsCount = newsItems.filter(n => n.is_active).length
+  const activeNewsCount = newsItems.filter(n => n.isActive).length
   const activeEventsCount = events.filter(e => e.isActive).length
   const activeAwardsCount = awards.filter(a => a.isActive).length
   const activeTeachersCount = teachers.filter(t => t.isActive).length
@@ -850,7 +850,7 @@ export default function AdminPage() {
                             <p className="text-gray-800">{item.message}</p>
                           </div>
                           <div className="flex items-center gap-2">
-                            <button onClick={() => handleToggleNews(item)} className={`p-2 rounded-lg ${item.is_active ? 'bg-green-100 text-green-600 hover:bg-green-200' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}><i className={`fas ${item.is_active ? 'fa-eye' : 'fa-eye-slash'}`}></i></button>
+                            <button onClick={() => handleToggleNews(item)} className={`p-2 rounded-lg ${item.isActive ? 'bg-green-100 text-green-600 hover:bg-green-200' : 'bg-gray-200 text-gray-500 hover:bg-gray-300'}`}><i className={`fas ${item.isActive ? 'fa-eye' : 'fa-eye-slash'}`}></i></button>
                             <button onClick={() => setEditingNews(item)} className="p-2 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200"><i className="fas fa-edit"></i></button>
                             <button onClick={() => handleDeleteNews(item.id)} className="p-2 rounded-lg bg-red-100 text-red-600 hover:bg-red-200"><i className="fas fa-trash"></i></button>
                           </div>

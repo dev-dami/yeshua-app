@@ -10,7 +10,16 @@ export async function GET() {
       .order('created_at', { ascending: false })
 
     if (error) throw error
-    return NextResponse.json(data)
+    
+    const formatted = data.map((item) => ({
+      id: item.id,
+      message: item.message,
+      isActive: item.is_active,
+      createdAt: item.created_at,
+      updatedAt: item.updated_at,
+    }))
+    
+    return NextResponse.json(formatted)
   } catch {
     return NextResponse.json([])
   }

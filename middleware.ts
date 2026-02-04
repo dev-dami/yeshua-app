@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  const protectedApiRoutes = ['/api/events', '/api/news-ticker', '/api/upload']
+  const protectedApiRoutes = ['/api/events', '/api/news-ticker', '/api/upload', '/api/teachers', '/api/awards', '/api/gallery']
   const isProtectedApi = protectedApiRoutes.some(route => pathname.startsWith(route))
   
   if (isProtectedApi) {
@@ -59,5 +59,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*', '/api/events/:path*', '/api/news-ticker/:path*', '/api/upload/:path*'],
+  matcher: ['/admin/:path*', '/api/events/:path*', '/api/news-ticker/:path*', '/api/upload/:path*', '/api/teachers/:path*', '/api/awards/:path*', '/api/gallery/:path*'],
 }
